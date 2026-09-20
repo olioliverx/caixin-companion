@@ -204,6 +204,20 @@ export function parseRenderedArticleDocument(url, ref = {}, maxImagesPerArticle 
           else anchor.removeAttribute('href');
         }
       }
+      // Let EPUB CSS supply paragraph indentation once, rather than stacking it
+      // on the publisher's literal full-width/NBSP spaces (including inline wrappers).
+      for (const paragraph of clone.querySelectorAll('p')) {
+        const leading = document.createTreeWalker(paragraph, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+        while (leading.nextNode()) {
+          const node = leading.currentNode;
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            if (['br', 'img', 'hr'].includes(node.localName)) break;
+          } else {
+            node.nodeValue = node.nodeValue.replace(/^\s+/, '');
+            if (node.nodeValue) break;
+          }
+        }
+      }
       // Source text, including author/copyright/AI labels and model-directed prose, stays data.
       const serializer = new XMLSerializer();
       return [...clone.childNodes].map(node => serializer.serializeToString(node)).join('').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '');

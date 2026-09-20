@@ -77,6 +77,20 @@ test('rendered parser removes active markup and preserves attribution and model-
   assert.equal(opf.getElementsByTagNameNS('http://purl.org/dc/elements/1.1/', 'identifier')[0].textContent, ncx.querySelector('meta').getAttribute('content'));
 });
 
+test('EPUB paragraph indentation does not stack on publisher whitespace or strip interior spaces', async () => {
+  page('<h1>缩进测试</h1><div id="Main_Content_Val"><p>　　正文 English words　中间空格</p><p>\n <span>&nbsp;　</span><strong>　强调</strong> 后文</p><p>没有空格</p><p><img src="https://img.caixin.com/a.jpg"> 图片之后</p></div>');
+  const parsed = parseRenderedArticleDocument(url); assert.ok(parsed.ok);
+  const files = await unzip(await buildEpub({ issue: { title: '测试' }, articles: [parsed.article], imageCache: new Map() }));
+  const chapter = new JSDOM(files.get('OEBPS/chapters/chapter-1.xhtml'), { contentType: 'application/xhtml+xml' }).window.document;
+  const paragraphs = [...chapter.querySelectorAll('.article-body p')];
+  assert.equal(paragraphs[0].textContent, '正文 English words　中间空格');
+  assert.equal(paragraphs[1].textContent, '强调 后文');
+  assert.equal(paragraphs[1].querySelector('strong').textContent, '强调');
+  assert.equal(paragraphs[2].textContent, '没有空格');
+  assert.ok(paragraphs[3].textContent.endsWith(' 图片之后'));
+  assert.match(files.get('OEBPS/styles/book.css'), /\.article-body p \{ text-indent: 2em; \}/);
+});
+
 test('visible and empty access walls fail closed, explicitly hidden walls do not', () => {
   page('<h1>Test</h1><div id="chargeWall">订阅后继续阅读</div><div id="Main_Content_Val"><p>正文</p></div>');
   assert.equal(parseRenderedArticleDocument(url).access.status, 'PAYWALLED');

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Caixin Companion · 财新周刊助手",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "为财新订阅用户提供个人离线阅读 EPUB 导出。独立开源工具，与财新无关联；仅处理已可阅读且获准转换的内容。",
   "icons": {
     "16": "assets/icons/icon-16.png",

@@ -14,8 +14,9 @@ h1, h2 {
 }
 h1 { font-size: 1.55em; margin: 0 0 .7em; }
 h2 { font-size: 1.2em; margin-top: 1.4em; }
-p { margin: .8em 0; text-indent: 1em; }
-.article-body p { text-indent: 1em; }
+p { margin: .8em 0; text-indent: 0; }
+.article-body p { text-indent: 2em; }
+.article-body .figcaption p, .article-body td p, .article-body th p { text-indent: 0; }
 .meta, .summary, .figcaption { color: #666; font-size: .88em; text-indent: 0; }
 .figure { margin: 1em 0; page-break-inside: avoid; text-indent: 0; }
 img { max-width: 100%; height: auto; }
