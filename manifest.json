@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Caixin Companion · 财新周刊助手",
+  "version": "1.0.0",
+  "description": "为财新订阅用户提供个人离线阅读 EPUB 导出。独立开源工具，与财新无关联；仅处理已可阅读且获准转换的内容。",
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  },
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_title": "Caixin Companion · 财新周刊助手",
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "32": "assets/icons/icon-32.png",
+      "48": "assets/icons/icon-48.png",
+      "128": "assets/icons/icon-128.png"
+    }
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://weekly.caixin.com/*",
+    "https://img.caixin.com/*",
+    "https://file.caixin.com/*",
+    "https://datanews.caixin.com/mobile/article/*"
+  ],
+  "minimum_chrome_version": "120"
+}

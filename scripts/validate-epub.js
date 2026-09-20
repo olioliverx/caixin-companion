@@ -1,0 +1,21 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { JSDOM } from 'jsdom';
+import { parseRenderedArticleDocument } from '../src/article.js';
+import { buildEpub } from '../src/epub.js';
+import { articleHtml, articleUrl, issueUrl, png } from '../tests/fixtures/content.js';
+const dom = new JSDOM(articleHtml, { url: articleUrl });
+for (const key of ['document', 'location', 'Node', 'NodeFilter', 'XMLSerializer']) globalThis[key] = dom.window[key];
+Object.defineProperty(document, 'readyState', { value: 'complete' });
+const parsed = parseRenderedArticleDocument(articleUrl);
+if (!parsed.ok) throw new Error(parsed.message);
+const blob = await buildEpub({ issue: { title: '自有合成验证材料', url: issueUrl, date: '2026-09-18', sourceName: '自有测试材料（合成地址）', coverUrl: 'https://img.caixin.com/synthetic.png' },
+  articles: [parsed.article], imageCache: new Map([['https://img.caixin.com/synthetic.png', { bytes: png, extension: 'png', mediaType: 'image/png' }]]), warnings: ['一张测试图片故意缺失。', '这是自有工程测试材料，不是财新发行刊物。'] });
+await mkdir('dist', { recursive: true });
+await writeFile('dist/synthetic-validation.epub', new Uint8Array(await blob.arrayBuffer()));
+if (!process.env.EPUBCHECK_JAR) throw new Error('EPUBCHECK_JAR is required; the generated fixture alone is not conformance evidence.');
+const result = spawnSync(process.env.JAVA_BIN || 'java', ['-jar', process.env.EPUBCHECK_JAR, 'dist/synthetic-validation.epub', '--failonwarnings'], { encoding: 'utf8' });
+const log = `${result.stdout || ''}${result.stderr || ''}${result.error?.message || ''}`;
+await writeFile('dist/epubcheck.txt', log);
+console.log(log);
+if (result.status !== 0) process.exit(result.status || 1);

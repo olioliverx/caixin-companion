@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caixin Companion · 财新周刊助手</title>
+  <link rel="stylesheet" href="wonder.scoped.css"><link rel="stylesheet" href="popup.css">
+</head>
+<body data-wonder-ui data-theme="light" data-density="comfortable" data-recipe="caixin-companion">
+<main>
+  <header class="identity"><img src="../assets/icons/icon-48.png" width="40" height="40" alt=""><div><h1>Caixin Companion</h1><p class="subtitle">财新周刊助手</p></div></header>
+  <p id="status" role="status">正在检测当前页面...</p>
+  <section id="summary" hidden aria-label="当前阅读内容">
+    <h2 id="issueTitle" class="issue-title"></h2>
+    <p id="issueMeta" class="meta"></p><p id="articleCount" class="count"></p>
+    <details><summary>文章清单</summary><ol id="inventory"></ol></details>
+  </section>
+  <section class="actions" aria-label="导出">
+    <button id="exportEpub" disabled>导出 EPUB</button>
+    <p class="meta">在新标签页中导出，保存到你的设备。</p>
+    <button id="openWorkspace" class="text-button">在标签页中打开</button>
+  </section>
+  <section id="progressWrap" aria-live="polite" hidden>
+    <progress id="progress" value="0" max="100" aria-label="导出进度"></progress><p id="progressText"></p>
+    <button id="cancelExport" class="secondary" hidden>取消导出</button>
+  </section>
+  <section id="errors" role="alert" hidden></section>
+  <details id="exportNotes" class="export-notes" hidden><summary>导出说明</summary><ul id="exportNotesList"></ul></details>
+  <footer><p>仅供获准内容的个人离线阅读，请勿传播。</p><nav aria-label="帮助"><a href="../docs/PRIVACY.html" target="_blank" rel="noopener noreferrer">隐私</a><a href="../docs/SUPPORT.html" target="_blank" rel="noopener noreferrer">使用与支持</a><a href="https://github.com/olioliverx/caixin-companion" target="_blank" rel="noopener noreferrer">源代码</a></nav></footer>
+</main>
+<script src="theme.js" type="module"></script><script src="popup.js" type="module"></script>
+</body></html>

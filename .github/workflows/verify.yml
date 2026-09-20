@@ -1,0 +1,48 @@
+name: Verify
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci
+      - run: npm run check:source
+      - run: npm audit --audit-level=high
+      - run: npm test
+      - run: npm run package
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - name: Install pinned EPUBCheck
+        shell: bash
+        run: |
+          curl --fail --location --retry 3 --max-time 120 https://github.com/w3c/epubcheck/releases/download/v5.4.0/epubcheck-5.4.0.zip -o "$RUNNER_TEMP/epubcheck.zip"
+          echo "33350c61038e71dfb3d45a76aed04bf5481e6d5500cb780f6e98db8bbd15a28c  $RUNNER_TEMP/epubcheck.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/epubcheck.zip" -d "$RUNNER_TEMP"
+      - run: npm run test:epub
+        env:
+          EPUBCHECK_JAR: ${{ runner.temp }}/epubcheck-5.4.0/epubcheck.jar
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1, Node 24
+        if: always()
+        with:
+          name: synthetic-verification
+          retention-days: 7
+          path: |
+            dist/synthetic-validation.epub
+            dist/epubcheck.txt
+            output/playwright/

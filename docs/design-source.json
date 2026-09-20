@@ -1,0 +1,9 @@
+{
+  "sourceRepo": "olioliverx/wonder-design-system",
+  "sourceCommit": "a66f9b5c7601a5b898ffb4a2091ab41b4547fab5",
+  "systemVersion": "0.2.0-dev",
+  "recipe": "caixin-companion",
+  "adapter": "vanilla-web",
+  "ownedFiles": ["src/wonder.scoped.css"],
+  "localOverrides": ["src/popup.css", "src/theme.js"]
+}

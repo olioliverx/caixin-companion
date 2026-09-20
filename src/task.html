@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>EPUB 导出 · Caixin Companion</title><link rel="stylesheet" href="wonder.scoped.css"><link rel="stylesheet" href="popup.css"></head>
+<body data-wonder-ui data-theme="light" data-density="comfortable" data-recipe="caixin-companion"><main>
+<header class="identity"><img src="../assets/icons/icon-48.png" width="40" height="40" alt=""><div><h1>导出 EPUB</h1><p class="subtitle">Caixin Companion</p></div></header>
+<p id="taskHint" class="meta">导出期间请勿关闭或刷新此页。</p>
+<section id="progressWrap" aria-live="polite"><progress id="progress" max="100" value="0" aria-label="导出进度"></progress><p id="progressText">正在准备…</p></section>
+<button id="cancelExport">取消导出</button>
+<section id="errors" role="alert" hidden></section>
+<details id="exportNotes" class="export-notes" hidden><summary>导出说明</summary><ul id="exportNotesList"></ul></details>
+<details id="inventoryDetails"><summary>文章清单</summary><ol id="inventory"></ol></details>
+<button id="clearJob" class="secondary" hidden>删除本次任务记录</button>
+</main><script type="module" src="theme.js"></script><script type="module" src="task.js"></script></body>
+</html>
